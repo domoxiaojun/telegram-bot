@@ -1,0 +1,9 @@
+services:
+  telegram-bot:
+    build: .
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+    restart: unless-stopped
