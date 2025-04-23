@@ -1,109 +1,82 @@
-📦 Telegram Sticker Bot
-一个专为 Telegram 用户打造的 Bot，支持提取 Premium 表情包的 Custom ID。你可以通过发送 Emoji 或贴纸链接，快速获取 Custom ID，便于开发者或用户使用贴纸进行进一步创作、分析、二次开发等操作。
+```markdown
+# Telegram Sticker Bot
 
-✨ 功能特性
-✅ 支持发送单个或多个 Emoji（如：😂😍✨），自动提取 Telegram Premium 动态贴纸的 Custom ID。
+> 一个用于获取 Telegram Premium 贴纸 Custom ID 的开源 Bot，致力于简洁易用、功能强大，并完全遵守开源协议。
 
-✅ 支持直接发送贴纸链接，自动识别并提取对应 ID。
+## 🚀 项目简介
 
-✅ 自动判断是否为 Premium 表情，非 Premium 也会给出明确提示。
+`Telegram Sticker Bot` 是基于 Python 和 [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) 开发的轻量级 Telegram 机器人。它可以帮助用户快速获取 Telegram Premium 贴纸包中单个或多个贴纸（Emoji）的 `Custom ID`，支持通过表情符号或直接粘贴贴纸链接来查询。
 
-✅ 快速响应，极简交互，适合所有用户。
+## 🔧 功能特性
 
-✅ 完全开源，支持二次开发。
+- **多表情查询**：一次发送多个 Emoji，如 `😂😍✨`，即可批量获取对应的 Premium 贴纸 Custom ID。
+- **链接直链支持**：粘贴任意 Telegram 贴纸的链接，Bot 会自动提取并返回 Custom ID。
+- **响应迅速**：高效异步处理，快速返回结果。
+- **易于扩展**：模块化设计，方便后续添加更多功能（例如：贴纸包搜索、下载、管理等）。
+- **完全开源**：遵循 MIT 许可证，欢迎社区贡献和二次开发。
 
-✅ 后续将支持：
+## 📦 安装和运行
 
-获取表情的打包 ID 与所属 Sticker Set；
+1. 克隆仓库：
+   ```bash
+   git clone https://github.com/domoxiaojun/telegram-bot.git
+   cd telegram-bot
+   ```
+2. 创建并激活虚拟环境：
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   venv\\Scripts\\activate  # Windows
+   ```
+3. 安装依赖：
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. 配置环境变量：
+   - 在根目录下创建 `.env` 文件，添加：
+     ```text
+     BOT_TOKEN=你的Telegram机器人Token
+     ```
+5. 启动 Bot：
+   ```bash
+   python bot.py
+   ```
 
-将 Custom ID 反向转为贴纸/Emoji 预览；
+## ⚙️ 配置项
 
-一键保存与收藏；
+| 配置项       | 说明                  | 示例                           |
+| ------------ | --------------------- | ------------------------------ |
+| `BOT_TOKEN`  | Telegram Bot API Token | `123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11` |
+| `LOG_LEVEL`  | 日志等级               | `DEBUG`, `INFO`, `WARNING`     |
 
-Telegram 群组/频道插件支持；
+## 🛠 架构与实现
 
-与 AI 表情推荐系统集成。
+- 基于 `python-telegram-bot` 框架，使用异步 `asyncio` 进行并发处理。
+- 核心模块：
+  - `bot.py`：启动脚本，加载配置和命令处理器；
+  - `handlers/emoji.py`：处理 Emoji 查询逻辑；
+  - `handlers/link.py`：处理贴纸链接解析；
+  - `utils/api.py`：封装与 Telegram API 的交互。
 
-🚀 快速开始
-使用 Bot
-向 Bot 发送一个或多个 Emoji，例如：
 
-复制
-编辑
-😂😍✨
-或发送一个 Telegram 表情贴纸链接：
 
-arduino
-复制
-编辑
-https://t.me/addstickers/NameOfPremiumPack
-Bot 将自动解析并返回如下信息：
+## 🤝 贡献指南
 
-vbnet
-复制
-编辑
-Emoji: 😂
-Custom ID: CAACAgUAAxkBAAEK2F1kZ...
-Type: Premium Animated
-🛠 本地部署
-环境要求
-Python 3.9+
+1. Fork 本仓库并新建 Feature 分支：
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+2. 提交你的改动并推送：
+   ```bash
+   git commit -m "Add new feature"
+   git push origin feature/your-feature-name
+   ```
+3. 发起 Pull Request，描述你的变更内容和动机。
+4. 通过 CI 检查后，项目维护者将进行代码审阅并合并。
 
-Telegram Bot Token（可从 @BotFather 获取）
+请阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 获取更多细节。
 
-推荐部署于 Linux 或 VPS 上（如 Ubuntu）
+## 📄 开源协议
+本项目采用 [MIT 许可证](LICENSE) 开源，具体内容请参见 [LICENSE](LICENSE) 文件。
 
-安装依赖
-bash
-复制
-编辑
-git clone https://github.com/domoxiaojun/telegram-bot.git
-cd telegram-bot
-pip install -r requirements.txt
-启动 Bot
-将 .env.example 重命名为 .env 并填入你的 BOT_TOKEN，然后运行：
 
-bash
-复制
-编辑
-python bot.py
-🧱 技术栈
-Python
-
-python-telegram-bot
-
-dotenv
-
-asyncio（计划支持异步架构以提升响应速度）
-
-🤝 贡献指南
-我们欢迎任何形式的贡献！
-
-Fork 本项目
-
-创建你的特性分支：git checkout -b feature/你的特性
-
-提交你的修改：git commit -m '增加某功能'
-
-推送到分支：git push origin feature/你的特性
-
-提交 Pull Request
-
-请遵守项目的代码规范，并保持模块化与清晰注释。
-
-📜 开源协议
-本项目采用 MIT License 开源协议。你可以自由使用、修改、发布该代码，但请保留原作者信息。
-
-🔮 未来规划
-✅ 多语言支持（中文 / 英文）
-✅ 自定义 Emoji 组合收藏功能
-✅ 与其他 Telegram 工具生态整合（如 bot 内使用 AI 表情匹配推荐）
-✅ 可视化界面（支持网页端操作贴纸库）
-✅ 插件系统（便于开发者扩展功能）
-
-❤️ 鸣谢
-Telegram 团队提供的开放 API 和优秀生态
-
-所有开源社区的开发者与灵感启发
-
-感谢使用与支持本项目的每一位朋友！
