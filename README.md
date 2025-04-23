@@ -71,9 +71,8 @@
 3. 发起 Pull Request，描述你的变更内容和动机。
 4. 通过 CI 检查后，项目维护者将进行代码审阅并合并。
 
-请阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 获取更多细节。
 
 ## 📄 开源协议
-本项目采用 [MIT 许可证](LICENSE) 开源，具体内容请参见 [LICENSE](LICENSE) 文件。
+本项目采用 MIT 许可证 开源，具体内容请参见 LICENSE 文件。
 
 
