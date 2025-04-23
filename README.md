@@ -68,4 +68,4 @@
 
 
 ## 📄 开源协议
-本项目采用 MIT 许可证 开源，具体内容请参见 LICENSE 文件。
+本项目采用 MIT 许可证 开源，具体内容请参见 [LICENSE](https://github.com/domoxiaojun/telegram-bot/blob/master/LICENSE) 文件。
