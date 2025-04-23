@@ -3,9 +3,6 @@
 
 > 一个用于获取 Telegram Premium 贴纸 Custom ID 的开源 Bot，致力于简洁易用、功能强大，并完全遵守开源协议。
 
-## 🚀 项目简介
-
-`Telegram Sticker Bot` 是基于 Python 和 [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) 开发的轻量级 Telegram 机器人。它可以帮助用户快速获取 Telegram Premium 贴纸包中单个或多个贴纸（Emoji）的 `Custom ID`，支持通过表情符号或直接粘贴贴纸链接来查询。
 
 ## 🔧 功能特性
 
