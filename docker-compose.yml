@@ -1,9 +1,21 @@
 services:
   telegram-bot:
-    build: .
+    image: ${DOCKER_IMAGE:-ghcr.io/domoxiaojun/telegram-bot:latest}
+    pull_policy: ${DOCKER_PULL_POLICY:-always}
+    ports:
+      - "${WEBHOOK_PORT:-8443}:${WEBHOOK_PORT:-8443}"
     volumes:
       - ./logs:/app/logs
       - ./data:/app/data
     environment:
       - BOT_TOKEN=${BOT_TOKEN}
+      - BOT_MODE=${BOT_MODE:-webhook}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - WEBHOOK_LISTEN=0.0.0.0
+      - WEBHOOK_PORT=${WEBHOOK_PORT:-8443}
+      - WEBHOOK_SECRET_TOKEN=${WEBHOOK_SECRET_TOKEN:-}
+      - WEBHOOK_CERT=${WEBHOOK_CERT:-}
+      - WEBHOOK_KEY=${WEBHOOK_KEY:-}
+      - WEBHOOK_DROP_PENDING_UPDATES=${WEBHOOK_DROP_PENDING_UPDATES:-false}
+      - DATA_DIR=/app/data
     restart: unless-stopped

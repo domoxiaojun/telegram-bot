@@ -18,30 +18,75 @@
     ```
 2.  创建并激活虚拟环境：
     ```bash
-    python3 -m venv venv
-    source venv/bin/activate  # Linux/Mac
-    venv\Scripts\activate  # Windows
+    uv venv
+    source .venv/bin/activate  # Linux/Mac
     ```
 3.  安装依赖：
     ```bash
-    pip install -r requirements.txt
+    uv pip install -r requirements.txt
     ```
 4.  配置环境变量：
     -   在根目录下创建 `.env` 文件，添加：
         ```text
         BOT_TOKEN=你的Telegram机器人Token
+        BOT_MODE=webhook
+        WEBHOOK_URL=https://你的域名/telegram-webhook
         ```
 5.  启动 Bot：
     ```bash
-    python bot.py
+    uv run python src/bot.py
     ```
+
+    本地调试如果没有公网 HTTPS 地址，可以临时使用 polling：
+    ```bash
+    BOT_MODE=polling uv run python src/bot.py
+    ```
+
+### Docker 部署
+
+项目会通过 GitHub Actions 构建并推送多架构镜像到 GHCR：
+
+```text
+ghcr.io/domoxiaojun/telegram-bot:latest
+```
+
+该镜像支持 `linux/amd64` 和 `linux/arm64`。配置好 `.env` 后可以直接启动：
+
+```bash
+docker compose up -d
+```
+
+如需使用其它镜像：
+
+```text
+DOCKER_IMAGE=ghcr.io/你的账号/telegram-bot:latest
+```
 
 ## ⚙️ 配置项
 
 | 配置项      | 说明                 | 示例                                           |
 | ----------- | -------------------- | ---------------------------------------------- |
 | `BOT_TOKEN` | Telegram Bot API Token | `123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11` |
+| `BOT_MODE` | 运行模式，支持 `webhook` / `polling` | `webhook` |
+| `WEBHOOK_URL` | Telegram 回调的公网 HTTPS 完整地址 | `https://bot.example.com/telegram-webhook` |
+| `WEBHOOK_LISTEN` | Webhook 服务监听地址 | `0.0.0.0` |
+| `WEBHOOK_PORT` | Webhook 服务监听端口，Telegram 常用 `443` / `8443` | `8443` |
+| `WEBHOOK_SECRET_TOKEN` | 可选，用于校验 Telegram webhook 请求来源 | `一段随机字符串` |
+| `WEBHOOK_CERT` / `WEBHOOK_KEY` | 可选，直接暴露 HTTPS 时使用的证书和私钥路径；反向代理终止 TLS 时不用配置 | `/app/cert.pem` / `/app/key.pem` |
 | `LOG_LEVEL` | 日志等级             | `DEBUG`, `INFO`, `WARNING`                     |
+
+### Webhook 部署说明
+
+Telegram webhook 必须使用公网 HTTPS 地址。推荐部署方式是让 Nginx、Caddy 或 Cloudflare 负责 HTTPS，然后把请求转发到容器的 `WEBHOOK_PORT`。
+
+如果 `.env` 中设置：
+
+```text
+WEBHOOK_URL=https://bot.example.com/telegram-webhook
+WEBHOOK_PORT=8443
+```
+
+反向代理需要把 `https://bot.example.com/telegram-webhook` 转发到 bot 服务的 `http://127.0.0.1:8443/telegram-webhook`。
 
 ## 🛠 架构与实现
 

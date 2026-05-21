@@ -6,9 +6,22 @@ from datetime import datetime
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 import requests
-from config import TOKEN
+from config import (
+    BOT_MODE,
+    DATA_DIR,
+    TOKEN,
+    WEBHOOK_CERT,
+    WEBHOOK_DROP_PENDING_UPDATES,
+    WEBHOOK_KEY,
+    WEBHOOK_LISTEN,
+    WEBHOOK_PORT,
+    WEBHOOK_SECRET_TOKEN,
+    WEBHOOK_URL,
+    WEBHOOK_URL_PATH,
+)
 
 # 设置日志
+os.makedirs("logs", exist_ok=True)
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO,  # 设置为INFO以记录重要信息
@@ -190,7 +203,7 @@ async def handle_custom_emoji(update: Update, context: ContextTypes.DEFAULT_TYPE
                 # 如果有混合内容，发送JSON文件和文本信息
                 # 创建输出数据
                 output_filename = f"emoji_info_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-                output_path = os.path.join("data", output_filename)
+                output_path = os.path.join(DATA_DIR, output_filename)
                 
                 with open(output_path, 'w', encoding='utf-8') as f:
                     json.dump(emoji_data, f, indent=2, ensure_ascii=False)
@@ -259,11 +272,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
                 output_data["stickers"].append(sticker_info)
         
         # 创建输出目录（如果不存在）
-        os.makedirs("data", exist_ok=True)
+        os.makedirs(DATA_DIR, exist_ok=True)
         
         # 保存JSON文件
         filename = f"sticker_set_{sticker_set_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        filepath = os.path.join("data", filename)
+        filepath = os.path.join(DATA_DIR, filename)
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(output_data, f, indent=2, ensure_ascii=False)
         logger.info(f"保存贴纸集JSON文件: {filepath}")
@@ -312,8 +325,27 @@ def main() -> None:
             logger.error(f"Update {update} caused error {context.error}", exc_info=context.error)
         application.add_error_handler(error_handler)
 
-        logger.info("Bot started")
-        application.run_polling(allowed_updates=Update.ALL_TYPES)
+        logger.info(f"Bot starting in {BOT_MODE} mode")
+        if BOT_MODE == "webhook":
+            logger.info(
+                "Webhook server listening on %s:%s with path '/%s'",
+                WEBHOOK_LISTEN,
+                WEBHOOK_PORT,
+                WEBHOOK_URL_PATH,
+            )
+            application.run_webhook(
+                listen=WEBHOOK_LISTEN,
+                port=WEBHOOK_PORT,
+                url_path=WEBHOOK_URL_PATH,
+                webhook_url=WEBHOOK_URL,
+                cert=WEBHOOK_CERT,
+                key=WEBHOOK_KEY,
+                allowed_updates=Update.ALL_TYPES,
+                drop_pending_updates=WEBHOOK_DROP_PENDING_UPDATES,
+                secret_token=WEBHOOK_SECRET_TOKEN,
+            )
+        else:
+            application.run_polling(allowed_updates=Update.ALL_TYPES)
     except Exception as e:
         logger.error(f"启动机器人时出错: {e}")
         raise
